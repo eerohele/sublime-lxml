@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/eerohele/sublime-lxml/issues",
+  "platforms": ["*"],
+  "version": "0.1.0",
+  "sublime_text": "*",
+  "description": "lxml"
+}
