@@ -11,7 +11,7 @@
 #  endif
 #endif
 
-#include "libxml/xmlversion.h"
+#include <libxml/xmlversion.h>
 #ifndef LIBXML_VERSION
 #  error the development package of libxml2 (header files etc.) is not installed correctly
 #else
@@ -20,7 +20,7 @@
 #endif
 #endif
 
-#include "libxslt/xsltconfig.h"
+#include <libxslt/xsltconfig.h>
 #ifndef LIBXSLT_VERSION
 #  error the development package of libxslt (header files etc.) is not installed correctly
 #else
@@ -178,7 +178,7 @@ static PyObject* PyBytes_FromFormat(const char* format, ...) {
 #  define XML_PARSE_BIG_LINES 4194304
 #endif
 
-#include "libxml/tree.h"
+#include <libxml/tree.h>
 #ifndef LIBXML2_NEW_BUFFER
    typedef xmlBuffer xmlBuf;
 #  define xmlBufContent(buf) xmlBufferContent(buf)
@@ -201,7 +201,7 @@ long _ftol2( double dblSource ) { return _ftol( dblSource ); }
 
 #ifdef __GNUC__
 /* Test for GCC > 2.95 */
-#if __GNUC__ > 2 || (__GNUC__ == 2 && (__GNUC_MINOR__ > 95)) 
+#if __GNUC__ > 2 || (__GNUC__ == 2 && (__GNUC_MINOR__ > 95))
 #define unlikely_condition(x) __builtin_expect((x), 0)
 #else /* __GNUC__ > 2 ... */
 #define unlikely_condition(x) (x)
@@ -262,7 +262,7 @@ long _ftol2( double dblSource ) { return _ftol( dblSource ); }
  * 'inclusive' is 1).  The _ELEMENT_ variants will only stop on nodes
  * that match _isElement(), the normal variant will stop on every node
  * except text nodes.
- * 
+ *
  * To traverse the node and all of its children and siblings in Pyrex, call
  *    cdef xmlNode* some_node
  *    BEGIN_FOR_EACH_ELEMENT_FROM(some_node.parent, some_node, 1)
