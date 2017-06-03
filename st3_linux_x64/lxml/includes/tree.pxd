@@ -11,11 +11,12 @@ cdef extern from "libxml/xmlversion.h":
 
 cdef extern from "libxml/xmlstring.h":
     ctypedef unsigned char xmlChar
-    ctypedef unsigned char const_xmlChar "const xmlChar"
+    ctypedef const xmlChar const_xmlChar "const xmlChar"
     cdef int xmlStrlen(const_xmlChar* str) nogil
     cdef xmlChar* xmlStrdup(const_xmlChar* cur) nogil
     cdef int xmlStrncmp(const_xmlChar* str1, const_xmlChar* str2, int length) nogil
     cdef int xmlStrcmp(const_xmlChar* str1, const_xmlChar* str2) nogil
+    cdef int xmlStrcasecmp(const xmlChar *str1, const xmlChar *str2) nogil
     cdef const_xmlChar* xmlStrstr(const_xmlChar* str1, const_xmlChar* str2) nogil
     cdef const_xmlChar* xmlStrchr(const_xmlChar* str1, xmlChar ch) nogil
     cdef const_xmlChar* _xcstr "(const xmlChar*)PyBytes_AS_STRING" (object s)
@@ -60,6 +61,7 @@ cdef extern from "libxml/encoding.h":
 
 cdef extern from "libxml/chvalid.h":
     cdef int xmlIsChar_ch(char c) nogil
+    cdef int xmlIsCharQ(int ch) nogil
 
 cdef extern from "libxml/hash.h":
     ctypedef struct xmlHashTable
@@ -287,6 +289,7 @@ cdef extern from "libxml/tree.h":
 
     ctypedef struct xmlID:
         const_xmlChar* value
+        const_xmlChar* name
         xmlAttr* attr
         xmlDoc* doc
         
@@ -355,6 +358,8 @@ cdef extern from "libxml/tree.h":
     cdef void xmlNodeDumpOutput(xmlOutputBuffer* buf,
                                 xmlDoc* doc, xmlNode* cur, int level,
                                 int format, const_char* encoding) nogil
+    cdef void xmlBufAttrSerializeTxtContent(xmlOutputBuffer *buf, xmlDoc *doc,
+                                xmlAttr *attr, const_xmlChar *string) nogil
     cdef void xmlNodeSetName(xmlNode* cur, const_xmlChar* name) nogil
     cdef void xmlNodeSetContent(xmlNode* cur, const_xmlChar* content) nogil
     cdef xmlDtd* xmlCopyDtd(xmlDtd* dtd) nogil
@@ -372,6 +377,8 @@ cdef extern from "libxml/tree.h":
     cdef size_t xmlBufUse(xmlBuf* buf) nogil # new in libxml2 2.9
     cdef int xmlKeepBlanksDefault(int val) nogil
     cdef xmlChar* xmlNodeGetBase(xmlDoc* doc, xmlNode* node) nogil
+    cdef xmlDtd* xmlCreateIntSubset(xmlDoc* doc, const_xmlChar* name,
+                                    const_xmlChar* ExternalID, const_xmlChar* SystemID) nogil
     cdef void xmlNodeSetBase(xmlNode* node, const_xmlChar* uri) nogil
     cdef int xmlValidateNCName(const_xmlChar* value, int space) nogil
 
@@ -388,6 +395,7 @@ cdef extern from "libxml/valid.h":
     cdef xmlAttr* xmlGetID(xmlDoc* doc, const_xmlChar* ID) nogil
     cdef void xmlDumpNotationTable(xmlBuffer* buffer,
                                    xmlNotationTable* table) nogil
+    cdef int xmlValidateNameValue(const_xmlChar* value) nogil
 
 cdef extern from "libxml/xmlIO.h":
     cdef int xmlOutputBufferWrite(xmlOutputBuffer* out,
