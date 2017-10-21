@@ -20,21 +20,21 @@ extern "C" {
  *
  * the version string like "1.2.3"
  */
-#define LIBXSLT_DOTTED_VERSION "1.1.29"
+#define LIBXSLT_DOTTED_VERSION "1.1.30"
 
 /**
  * LIBXSLT_VERSION:
  *
  * the version number: 1.2.3 value is 10203
  */
-#define LIBXSLT_VERSION 10129
+#define LIBXSLT_VERSION 10130
 
 /**
  * LIBXSLT_VERSION_STRING:
  *
  * the version number string, 1.2.3 value is "10203"
  */
-#define LIBXSLT_VERSION_STRING "10129"
+#define LIBXSLT_VERSION_STRING "10130"
 
 /**
  * LIBXSLT_VERSION_EXTRA:
@@ -120,7 +120,7 @@ extern "C" {
 #ifndef WITH_MODULES
 #define WITH_MODULES
 #endif
-#define LIBXSLT_DEFAULT_PLUGINS_PATH() "/tmp/pip-7hhvdy-build/build/tmp/libxml2/lib/libxslt-plugins"
+#define LIBXSLT_DEFAULT_PLUGINS_PATH() "/tmp/pip-9jiurx-build/build/tmp/libxml2/lib/libxslt-plugins"
 #endif
 
 /**
