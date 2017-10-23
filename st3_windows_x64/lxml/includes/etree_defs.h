@@ -198,6 +198,8 @@ static PyObject* PyBytes_FromFormat(const char* format, ...) {
 #define exsltStrXpathCtxtRegister(ctxt, prefix)
 #endif
 
+#define LXML_GET_XSLT_ENCODING(result_var, style) XSLT_GET_IMPORT_PTR(result_var, style, encoding)
+
 /* work around MSDEV 6.0 */
 #if (_MSC_VER == 1200) && (WINVER < 0x0500)
 long _ftol( double ); //defined by VC6 C libs
@@ -259,6 +261,49 @@ long _ftol2( double dblSource ) { return _ftol( dblSource ); }
 #define _getNs(c_node) \
         (((c_node)->ns == 0) ? 0 : ((c_node)->ns->href))
 
+
+/* PyCapsule was added in Py2.7 */
+#if PY_VERSION_HEX >= 0x02070000
+#include "string.h"
+static void* lxml_unpack_xmldoc_capsule(PyObject* capsule, int* is_owned) {
+    xmlDoc *c_doc;
+    void *context;
+    *is_owned = 0;
+    if (unlikely_condition(!PyCapsule_IsValid(capsule, (const char*)"libxml2:xmlDoc"))) {
+        PyErr_SetString(
+                PyExc_TypeError,
+                "Not a valid capsule. The capsule argument must be a capsule object with name libxml2:xmlDoc");
+        return NULL;
+    }
+    c_doc = (xmlDoc*) PyCapsule_GetPointer(capsule, (const char*)"libxml2:xmlDoc");
+    if (unlikely_condition(!c_doc)) return NULL;
+
+    if (unlikely_condition(c_doc->type != XML_DOCUMENT_NODE && c_doc->type != XML_HTML_DOCUMENT_NODE)) {
+        PyErr_Format(
+            PyExc_ValueError,
+            "Illegal document provided: expected XML or HTML, found %d", (int)c_doc->type);
+        return NULL;
+    }
+
+    context = PyCapsule_GetContext(capsule);
+    if (unlikely_condition(!context && PyErr_Occurred())) return NULL;
+    if (context && strcmp((const char*) context, "destructor:xmlFreeDoc") == 0) {
+        /* take ownership by setting destructor to NULL */
+        if (PyCapsule_SetDestructor(capsule, NULL) == 0) {
+            /* ownership transferred => invalidate capsule by clearing its name */
+            if (unlikely_condition(PyCapsule_SetName(capsule, NULL))) {
+                /* this should never happen since everything above succeeded */
+                xmlFreeDoc(c_doc);
+                return NULL;
+            }
+            *is_owned = 1;
+        }
+    }
+    return c_doc;
+}
+#else
+#  define lxml_unpack_xmldoc_capsule(capsule, is_owned)  (((capsule) || (is_owned)) ? NULL : NULL)
+#endif
 
 /* Macro pair implementation of a depth first tree walker
  *

@@ -20,21 +20,21 @@ extern "C" {
  *
  * the version string like "1.2.3"
  */
-#define LIBXSLT_DOTTED_VERSION "1.1.29"
+#define LIBXSLT_DOTTED_VERSION "1.1.31"
 
 /**
  * LIBXSLT_VERSION:
  *
  * the version number: 1.2.3 value is 10203
  */
-#define LIBXSLT_VERSION 10129
+#define LIBXSLT_VERSION 10131
 
 /**
  * LIBXSLT_VERSION_STRING:
  *
  * the version number string, 1.2.3 value is "10203"
  */
-#define LIBXSLT_VERSION_STRING "10129"
+#define LIBXSLT_VERSION_STRING "10131"
 
 /**
  * LIBXSLT_VERSION_EXTRA:
@@ -120,7 +120,7 @@ extern "C" {
 #ifndef WITH_MODULES
 #define WITH_MODULES
 #endif
-#define LIBXSLT_DEFAULT_PLUGINS_PATH() "/private/var/folders/l7/jvct014j701b4qn3v07n1c100000gn/T/pip-build-dod8kk/lxml/build/tmp/libxml2/lib/libxslt-plugins"
+#define LIBXSLT_DEFAULT_PLUGINS_PATH() "/Users/travis/build/lxml/lxml-wheels/lxml/build/tmp/libxml2/lib/libxslt-plugins"
 #endif
 
 /**
